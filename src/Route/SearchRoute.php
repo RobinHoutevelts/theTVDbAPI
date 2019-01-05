@@ -52,7 +52,10 @@ class SearchRoute extends AbstractRoute
      * Parameter name for searching by zap2it id.
      */
     const SEARCH_ZAP2IT = 'zap2itId';
-
+    /**
+     * Parameter name for searching by slug.
+     */
+    const SEARCH_SLUG = 'slug';
 
     /**
      * Searches on theTVDb with a given query for an given identifier.
@@ -64,7 +67,7 @@ class SearchRoute extends AbstractRoute
      */
     public function search(string $identifier, string $searchQuery): array
     {
-        if (in_array($identifier, [static::SEARCH_NAME, static::SEARCH_IMDB, static::SEARCH_ZAP2IT]) === false) {
+        if ($this->isValidSearchIdentifier($identifier) === false) {
             throw new InvalidArgumentException('Given search identifier is invalid!');
         }
         $options = ['query' => [$identifier => $searchQuery]];
@@ -107,5 +110,37 @@ class SearchRoute extends AbstractRoute
     public function searchByZap2ItId(string $zap2itId): array
     {
         return $this->search(static::SEARCH_ZAP2IT, $zap2itId);
+    }
+
+    /**
+     * Searches on theTVDb for (a) serie(s) with a given slug.
+     *
+     * @param string $slug The slug to search for.
+     *
+     * @return array A list of matching Series.
+     */
+    public function searchBySlug(string $slug): array
+    {
+        return $this->search(static::SEARCH_SLUG, $slug);
+    }
+
+    /**
+     * Makes sure the identifier is a search identifier.
+     *
+     * @param string $identifier The identifier to check.
+     *
+     * @return bool Returns TRUE when the identifier is valid.
+     */
+    protected function isValidSearchIdentifier(string $identifier): bool
+    {
+        return in_array(
+            $identifier,
+            [
+                static::SEARCH_NAME,
+                static::SEARCH_IMDB,
+                static::SEARCH_ZAP2IT,
+                static::SEARCH_SLUG,
+            ]
+        );
     }
 }

@@ -84,4 +84,10 @@ class BasicSeries
      * @var string
      */
     public $status;
+    /**
+     * The slug of the serie.
+     *
+     * @var string
+     */
+    public $slug;
 }

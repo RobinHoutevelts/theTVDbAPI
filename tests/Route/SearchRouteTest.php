@@ -88,4 +88,18 @@ class SearchRouteTest extends BaseRouteTest
         $results = $instance->searchByZap2ItId($name);
         static::assertContainsOnlyInstancesOf(BasicSeries::class, $results);
     }
+
+    public function testSearchBySlug()
+    {
+        $name = 'foo';
+        $return = [
+            ['id' => 1, 'seriesName' => 'foo'],
+            ['id' => 3, 'seriesName' => 'foo bar']
+        ];
+        $options = ['query' => [SearchRoute::SEARCH_SLUG => $name]];
+        $this->setMockData($return, $options);
+        $instance = new SearchRoute($this->parent);
+        $results = $instance->searchBySlug($name);
+        static::assertContainsOnlyInstancesOf(BasicSeries::class, $results);
+    }
 }
